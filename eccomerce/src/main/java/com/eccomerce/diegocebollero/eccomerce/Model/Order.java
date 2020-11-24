@@ -1,7 +1,5 @@
 package com.eccomerce.diegocebollero.eccomerce.Model;
 
-import java.util.Date;
-
 public class Order {
     private static int idCount = 0;
     private int id = 0;
