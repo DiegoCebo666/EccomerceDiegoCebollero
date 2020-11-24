@@ -5,13 +5,13 @@ import java.util.Date;
 public class Order {
     private static int idCount = 0;
     private int id = 0;
-    private Date fecha;
+    private String fecha;
     private String username;
     private String estado;
 
     public Order(){}
 
-    public Order(Date fecha, String username, int estado) {
+    public Order(String fecha, String username, int estado) {
         this.id = ++idCount;
         this.fecha = fecha;
         this.username = username;
@@ -23,10 +23,10 @@ public class Order {
     public void setId(int id) {
         this.id = id;
     }
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
     public String getUsername() {
