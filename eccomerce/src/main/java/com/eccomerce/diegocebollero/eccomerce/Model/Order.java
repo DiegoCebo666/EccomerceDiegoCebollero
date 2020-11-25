@@ -1,5 +1,8 @@
 package com.eccomerce.diegocebollero.eccomerce.Model;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 public class Order {
     private static int idCount = 0;
     private int id = 0;
@@ -9,9 +12,10 @@ public class Order {
 
     public Order(){}
 
-    public Order(String fecha, String username, int estado) {
+    public Order(String username, int estado) {
         this.id = ++idCount;
-        this.fecha = fecha;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        this.fecha = formatter.format(new Date());
         this.username = username;
         setEstado(estado);
     }
