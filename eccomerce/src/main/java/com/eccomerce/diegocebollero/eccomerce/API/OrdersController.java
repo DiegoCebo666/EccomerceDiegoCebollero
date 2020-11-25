@@ -6,6 +6,7 @@ import java.util.Arrays;
 import com.eccomerce.diegocebollero.eccomerce.Model.Order;
 import com.eccomerce.diegocebollero.eccomerce.Model.OrderProduct;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,14 +37,35 @@ public class OrdersController {
     }
 
     @PostMapping("order")
-    public int postOrder(@RequestParam(name="products", required = false) ArrayList<OrderProduct> orderProducts,
+    public int postOrder(@RequestParam(name="products", required = false) ArrayList<OrderProduct> products,
                     @RequestParam(name="username", required = true, defaultValue = "") String username){
         Order order = new Order(username, 1);
         int orderId = order.getId();
         orders.add(order);
         for (int i = 0; i < orderProducts.size(); i++) {
-            orderProducts.get(i).setId(orderId);
+            products.get(i).setId(orderId);
+            orderProducts.add(products.get(i));
         }
         return orderId;
+    }
+
+    @DeleteMapping("order/{id}")
+    public int deleteOrder(@PathVariable int id){
+        if(findById(id) == null){
+            return 0;
+        }
+        Order order = findById(id);
+        orders.remove(order);
+        for (int i = 0; i < orderProducts.size(); i++) {
+            if(orderProducts.get(i).getIdorder() == id) orderProducts.remove(i);
+        }
+        return 1;
+    }
+
+    public Order findById(int id){
+        for (int i = 0; i < orders.size(); i++) {
+            if(orders.get(i).getId() == id) return orders.get(i);
+        }
+        return null;
     }
 }
