@@ -3,6 +3,9 @@ package com.eccomerce.diegocebollero.eccomerce.API;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.eccomerce.diegocebollero.eccomerce.Model.Order;
 import com.eccomerce.diegocebollero.eccomerce.Model.OrderProduct;
 
@@ -27,11 +30,13 @@ public class OrdersController {
     }
 
     @GetMapping("orders/{id}")
-    public ArrayList<OrderProduct> getOrderProductsById(@PathVariable(name = "id", required = true) int id) {
+    public ArrayList<OrderProduct> getOrderProductsById(@PathVariable("id") int id) {
         ArrayList<OrderProduct> result = new ArrayList<>();
+        NotFoundControl(id);
         for (int i = 0; i < orderProducts.size(); i++) {
-            if (orderProducts.get(i).getIdorder() == id)
+            if (orderProducts.get(i).getIdorder() == id){
                 result.add(orderProducts.get(i));
+            }
         }
         return result;
     }
@@ -51,9 +56,7 @@ public class OrdersController {
 
     @DeleteMapping("order/{id}")
     public int deleteOrder(@PathVariable int id){
-        if(findById(id) == null){
-            return 0;
-        }
+        NotFoundControl(id);
         Order order = findById(id);
         orders.remove(order);
         for (int i = 0; i < orderProducts.size(); i++) {
@@ -67,5 +70,17 @@ public class OrdersController {
             if(orders.get(i).getId() == id) return orders.get(i);
         }
         return null;
+    }
+
+    public void NotFoundControl(int id){
+        if(findById(id) == null){
+            throw new ElementNotFoundException();
+        }
+    }
+
+    public void NotFoundControl2(int id){
+        if(findById(id) == null){
+            throw new ImATeapotException();
+        }
     }
 }
