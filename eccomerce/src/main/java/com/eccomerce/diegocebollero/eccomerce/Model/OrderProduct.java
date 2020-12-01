@@ -1,19 +1,19 @@
 package com.eccomerce.diegocebollero.eccomerce.Model;
 
+import java.util.ArrayList;
+
 public class OrderProduct {
     private static int idCount = 0;
     private int id;
     private int idorder;
-    private int idproduct;
-    private int cantidad;
+    private ArrayList<ProductQuantity> productCantidad;
 
     public OrderProduct(){}
 
-    public OrderProduct(int idorder, int idproduct, int cantidad){
+    public OrderProduct(int idorder, ArrayList<ProductQuantity> productCantidad){
         this.id = ++idCount;
         this.idorder = idorder;
-        this.idproduct = idproduct;
-        this.cantidad = cantidad;
+        this.productCantidad = productCantidad;
     }
 
     public int getId() {
@@ -28,16 +28,10 @@ public class OrderProduct {
     public void setIdorder(int idorder) {
         this.idorder = idorder;
     }
-    public int getIdproduct() {
-        return idproduct;
+    public ArrayList<ProductQuantity> getProductCantidad() {
+        return productCantidad;
     }
-    public void setIdproduct(int idproduct) {
-        this.idproduct = idproduct;
-    }
-    public int getCantidad() {
-        return cantidad;
-    }
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+    public void setProductCantidad(ArrayList<ProductQuantity> productCantidad) {
+        this.productCantidad = productCantidad;
     }
 }
