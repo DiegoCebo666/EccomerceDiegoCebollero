@@ -2,6 +2,8 @@ package com.eccomerce.diegocebollero.eccomerce.Model;
 
 import java.util.ArrayList;
 
+import com.eccomerce.diegocebollero.eccomerce.Model.Support.ProductQuantity;
+
 public class OrderProduct {
     private static int idCount = 0;
     private int id;

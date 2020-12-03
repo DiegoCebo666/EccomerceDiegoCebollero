@@ -1,4 +1,4 @@
-package com.eccomerce.diegocebollero.eccomerce.Model;
+package com.eccomerce.diegocebollero.eccomerce.Model.Support;
 
 public class ProductQuantity {
     private int idproduct;
