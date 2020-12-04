@@ -3,13 +3,10 @@ package com.eccomerce.diegocebollero.eccomerce.API;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.eccomerce.diegocebollero.eccomerce.Model.EditDeleteOrders;
+import com.eccomerce.diegocebollero.eccomerce.Model.Support.EditDeleteOrders;
 import com.eccomerce.diegocebollero.eccomerce.Model.Order;
 import com.eccomerce.diegocebollero.eccomerce.Model.OrderProduct;
-import com.eccomerce.diegocebollero.eccomerce.Model.ProductQuantity;
+import com.eccomerce.diegocebollero.eccomerce.Model.Support.ProductQuantity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class OrdersController {
-    private static ArrayList<Order> orders = new ArrayList<>(Arrays.asList(new Order("PIPO", 2),
+    public static ArrayList<Order> orders = new ArrayList<>(Arrays.asList(new Order("PIPO", 2),
             new Order("PIPO", 2), new Order("PIPO", 2)));
 
-    private static ArrayList<OrderProduct> orderProducts = new ArrayList<>(
+    public static ArrayList<OrderProduct> orderProducts = new ArrayList<>(
             Arrays.asList(new OrderProduct(1, new ArrayList<>(Arrays.asList(new ProductQuantity(1, 78), new ProductQuantity(3, 231)))), new OrderProduct(1, new ArrayList<>(Arrays.asList(new ProductQuantity(1, 78), new ProductQuantity(3, 231)))), new OrderProduct(2, new ArrayList<>(Arrays.asList(new ProductQuantity(1, 78), new ProductQuantity(3, 231)))), new OrderProduct(3, new ArrayList<>(Arrays.asList(new ProductQuantity(1, 78), new ProductQuantity(3, 231))))));
 
     @GetMapping("orders")
@@ -40,11 +37,12 @@ public class OrdersController {
     }
 
     @PostMapping("orders")
-    public int postOrder(@RequestParam(name="products", required = false) OrderProduct products,
+    public int postOrder(@RequestBody OrderProduct products,
                     @RequestParam(name="username", required = true, defaultValue = "") String username){
         Order order = new Order(username, 1);
         int orderId = order.getId();
         orders.add(order);
+        products.setIdorder(orderId);
         orderProducts.add(products);
         return orderId;
     }
@@ -95,14 +93,14 @@ public class OrdersController {
         return 1;
     }
 
-    public Order findById(int id){
+    public static Order findById(int id){
         for (int i = 0; i < orders.size(); i++) {
             if(orders.get(i).getId() == id) return orders.get(i);
         }
         throw new ElementNotFoundException();
     }
 
-    public OrderProduct findOrderProductById(int id){
+    public static OrderProduct findOrderProductById(int id){
         for (int i = 0; i < orderProducts.size(); i++) {
             if(orders.get(i).getId() == id) return orderProducts.get(i);
         }

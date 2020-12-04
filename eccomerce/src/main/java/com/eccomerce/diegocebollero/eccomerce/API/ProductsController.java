@@ -5,21 +5,31 @@ import java.util.Arrays;
 
 import com.eccomerce.diegocebollero.eccomerce.Model.Product;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+@Controller
 public class ProductsController {
-    private static ArrayList<Product> products = new ArrayList<>(Arrays.asList(
+    public static ArrayList<Product> products = new ArrayList<>(Arrays.asList(
         new Product("PIPELUCHE", 14.99, "https://cdn1.peluchilandia.es/3304-home_default/peluche-perrito-melancolico.jpg"),
-        new Product("PIPOYOYO", 16.99, "https://cdn1.peluchilandia.es/3304-home_default/peluche-perrito-melancolico.jpg"),
+        new Product("PIPOYOYO", 16.99, "https://www.jugarijugar.com/1057-large_default/yo-yo-de-madera-natural.jpg"),
         new Product("PIPOCAMELLO", 9.99, "https://www.oasysparquetematico.com/wp-content/uploads/2019/04/shutterstock_199591094.jpg"),
         new Product("PIPOSAURIO", 6.66, "https://www.mrbooks.com/mrbooks/portadas/9789506031718.jpg"),
-        new Product("PIPOKIMON", 69.69, "https://cdn1.peluchilandia.es/3304-home_default/peluche-perrito-melancolico.jpg")
+        new Product("PIPOKIMON", 69.69, "https://images-na.ssl-images-amazon.com/images/I/81wESosz9eL._AC_SY355_.jpg")
     ));
 
     @GetMapping("products")
-    public ArrayList<Product> getProducts() {
-        return products;
+    public ModelAndView getProducts() {
+        ModelAndView mv = new ModelAndView("index");
+        mv.addObject("products", products);
+        return mv;
+    }
+
+    public static Product findProdById(int id){
+        for (int i = 0; i < products.size(); i++) {
+            if(products.get(i).getId() == id) return products.get(i);
+        }
+        throw new ElementNotFoundException();
     }
 }

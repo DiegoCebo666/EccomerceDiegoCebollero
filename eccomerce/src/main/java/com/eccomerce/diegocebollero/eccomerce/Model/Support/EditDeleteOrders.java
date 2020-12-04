@@ -1,4 +1,6 @@
-package com.eccomerce.diegocebollero.eccomerce.Model;
+package com.eccomerce.diegocebollero.eccomerce.Model.Support;
+
+import com.eccomerce.diegocebollero.eccomerce.Model.OrderProduct;
 
 public class EditDeleteOrders {
     private OrderProduct edit;
