@@ -16,9 +16,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class OrdersViewController {
 
-    @GetMapping("productsIn/{id}")
+    @GetMapping("products/{id}")
     public ModelAndView getProductsInOrder(@PathVariable("id") int id) {
         ModelAndView mv = new ModelAndView("index");
+        mv.addObject("productsIn", productsIn(id));
+        mv.addObject("productsOut", productsOut(id));
+        return mv;
+    }
+
+    public ArrayList<Product> productsIn(int id){
         ArrayList<Product> result = new ArrayList<>();
         OrderProduct products = OrdersController.findOrderProductById(id);
         for (int i = 0; i < products.getProductCantidad().size(); i++) {
@@ -27,43 +33,59 @@ public class OrdersViewController {
                     result.add(ProductsController.findProdById(ProductsController.products.get(j).getId()));
             }
         }
-        mv.addObject("products", result);
-        return mv;
+        return result;
     }
 
-    @GetMapping("productsOut/{id}")
-    public ModelAndView getProductsOutOrder(@PathVariable("id") int id) {
-        ModelAndView mv = new ModelAndView("index");
+    public ArrayList<Product> productsOut(int id){
+        boolean in = true;
         ArrayList<Product> result = new ArrayList<>();
         OrderProduct products = OrdersController.findOrderProductById(id);
         for (int j = 0; j < ProductsController.products.size(); j++) {
             for (int i = 0; i < products.getProductCantidad().size(); i++) {
                 if(products.getProductCantidad().get(i).getIdproduct() != ProductsController.products.get(j).getId()){
-                    result.add(ProductsController.findProdById(ProductsController.products.get(j).getId()));
-                    break;
+                    in = false;
                 }else{
+                    in = true;
                     break;
                 }
             }
+            if (!in) {
+                result.add(ProductsController.findProdById(ProductsController.products.get(j).getId()));
+            }
         }
-        mv.addObject("products", result);
-        return mv;
+        return result;
     }
 
-    @PostMapping("productsIn/{id}")
-    public void postProductsInOrder(@PathVariable("id") int id, @RequestParam(name = "idProd", required = true, defaultValue = "0") int idProd, 
+    @GetMapping("productsIn/{id}")
+    public ModelAndView postProductsInOrder(@PathVariable("id") int id, @RequestParam(name = "idProd", required = true, defaultValue = "0") int idProd, 
                                             @RequestParam(name = "cantidad", required = true, defaultValue = "0") int cantidad) {
         OrdersController.findOrderProductById(id).getProductCantidad().add(new ProductQuantity(idProd, cantidad));
         ModelAndView mv = new ModelAndView("index");
-        ArrayList<Product> result = new ArrayList<>();
-        OrderProduct products = OrdersController.findOrderProductById(id);
-        for (int i = 0; i < products.getProductCantidad().size(); i++) {
-            for (int j = 0; j < ProductsController.products.size(); j++) {
-                if(products.getProductCantidad().get(i).getIdproduct() == ProductsController.products.get(j).getId()) 
-                    result.add(ProductsController.findProdById(ProductsController.products.get(j).getId()));
+        mv.addObject("productsIn", productsIn(id));
+        mv.addObject("productsOut", productsOut(id));
+        return mv;
+    }
+
+    @GetMapping("productsOut/{id}")
+    public ModelAndView postProductsOutOrder(@PathVariable("id") int id, @RequestParam(name = "idProd", required = true, defaultValue = "0") int idProd) {
+        OrdersController.findOrderProductById(id).getProductCantidad().remove(findProdCantByProdId(id, idProd));
+        ModelAndView mv = new ModelAndView("index");
+        mv.addObject("productsIn", productsIn(id));
+        mv.addObject("productsOut", productsOut(id));
+        return mv;
+    }
+
+    public ProductQuantity findProdCantByProdId(int idOrder ,int idProd){
+        ArrayList<ProductQuantity> list = OrdersController.findOrderProductById(idOrder).getProductCantidad();
+        ProductQuantity result = null;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getIdproduct() == idProd) {
+                result = list.get(i);
             }
         }
-        mv.addObject("products", result);
-        return mv;
+        if (result == null) {
+            throw new ElementNotFoundException();
+        }
+        return result;
     }
 }
