@@ -8,16 +8,21 @@ import com.eccomerce.diegocebollero.eccomerce.Model.Order;
 import com.eccomerce.diegocebollero.eccomerce.Model.OrderProduct;
 import com.eccomerce.diegocebollero.eccomerce.Model.Support.ProductQuantity;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH })
 @RestController
+@RequestMapping("/orders")
 public class OrdersController {
     public static ArrayList<Order> orders = new ArrayList<>(Arrays.asList(new Order("PIPO", 2),
             new Order("PIPO", 2), new Order("PIPO", 2)));
@@ -25,18 +30,18 @@ public class OrdersController {
     public static ArrayList<OrderProduct> orderProducts = new ArrayList<>(
             Arrays.asList(new OrderProduct(1, new ArrayList<>(Arrays.asList(new ProductQuantity(1, 78), new ProductQuantity(3, 231)))), new OrderProduct(1, new ArrayList<>(Arrays.asList(new ProductQuantity(1, 78), new ProductQuantity(3, 231)))), new OrderProduct(2, new ArrayList<>(Arrays.asList(new ProductQuantity(1, 78), new ProductQuantity(3, 231)))), new OrderProduct(3, new ArrayList<>(Arrays.asList(new ProductQuantity(1, 78), new ProductQuantity(3, 231))))));
 
-    @GetMapping("orders")
+    @GetMapping
     public ArrayList<Order> getOrders() {
         return orders;
     }
 
-    @GetMapping("orders/{id}")
+    @GetMapping("/{id}")
     public OrderProduct getOrderProductsById(@PathVariable("id") int id) {
         OrderProduct result = findOrderProductById(id);
         return result;
     }
 
-    @PostMapping("orders")
+    @PostMapping
     public int postOrder(@RequestBody OrderProduct products,
                     @RequestParam(name="username", required = true, defaultValue = "") String username){
         Order order = new Order(username, 1);
@@ -47,7 +52,7 @@ public class OrdersController {
         return orderId;
     }
 
-    @PutMapping("orders/{id}")
+    @PutMapping("/{id}")
     public OrderProduct putOrder(@PathVariable("id") int id, @RequestBody EditDeleteOrders products){
         OrderProduct original = findOrderProductById(id);
         OrderProduct editProducts = products.getEdit();
@@ -82,7 +87,7 @@ public class OrdersController {
         return orderProducts.get(original.getId());
     }
 
-    @DeleteMapping("orders/{id}")
+    @DeleteMapping("/{id}")
     public int deleteOrder(@PathVariable int id){
         NotFoundControl(id);
         Order order = findById(id);

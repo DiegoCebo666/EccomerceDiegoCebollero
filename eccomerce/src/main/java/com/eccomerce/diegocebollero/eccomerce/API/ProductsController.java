@@ -6,10 +6,15 @@ import java.util.Arrays;
 import com.eccomerce.diegocebollero.eccomerce.Model.Product;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH })
 @Controller
+@RequestMapping("/apiazure")
 public class ProductsController {
     public static ArrayList<Product> products = new ArrayList<>(Arrays.asList(
         new Product("PIPELUCHE", 14.99, "https://cdn1.peluchilandia.es/3304-home_default/peluche-perrito-melancolico.jpg"),
