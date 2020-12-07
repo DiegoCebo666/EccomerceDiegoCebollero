@@ -1,78 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.eccomerce.diegocebollero</groupId>
-	<artifactId>eccomerce</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>eccomerce</name>
-	<description>Demo project for Spring Boot</description>
 
-	<properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">  
+  <modelVersion>4.0.0</modelVersion>  
+  <parent> 
+    <groupId>org.springframework.boot</groupId>  
+    <artifactId>spring-boot-starter-parent</artifactId>  
+    <version>2.4.0</version>  
+    <relativePath/>  
+    <!-- lookup parent from repository --> 
+  </parent>  
+  <groupId>com.eccomerce.diegocebollero</groupId>  
+  <artifactId>eccomerce</artifactId>  
+  <version>0.0.1-SNAPSHOT</version>  
+  <name>eccomerce</name>  
+  <description>Demo project for Spring Boot</description>  
+  <packaging>war</packaging>
+  <properties> 
 		<java.version>11</java.version>
-	</properties>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+  </properties>  
+  <dependencies> 
+    <dependency> 
+      <groupId>org.springframework.boot</groupId>  
+      <artifactId>spring-boot-starter-thymeleaf</artifactId> 
+    </dependency>  
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-compiler-plugin</artifactId>
 			<version>3.8.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-	</dependencies>
-
-	<build>
-		<plugins>
+    <dependency> 
+      <groupId>org.springframework.boot</groupId>  
+      <artifactId>spring-boot-starter-web</artifactId> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.springframework.boot</groupId>  
+      <artifactId>spring-boot-devtools</artifactId>  
+      <scope>runtime</scope>  
+      <optional>true</optional> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.springframework.boot</groupId>  
+      <artifactId>spring-boot-starter-test</artifactId>  
+      <scope>test</scope>  
+      <exclusions> 
+        <exclusion> 
+          <groupId>org.junit.vintage</groupId>  
+          <artifactId>junit-vintage-engine</artifactId> 
+        </exclusion> 
+      </exclusions> 
+    </dependency> 
+  </dependencies>  
+  <build> 
+    <plugins> 
+      <plugin> 
+        <groupId>org.springframework.boot</groupId>  
+        <artifactId>spring-boot-maven-plugin</artifactId> 
+      </plugin>  
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-compiler-plugin</artifactId>
+			  <version>3.8.1</version>
+			  <configuration>
+				<source>1.8</source>
+				<target>1.8</target>
+			  </configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.microsoft.azure</groupId>
 				<artifactId>azure-webapp-maven-plugin</artifactId>
-				<version>1.1.0</version>
+				<version>1.6.0</version>
 				<configuration>
 					<javaVersion>1.8</javaVersion>
-					<javaWebContainer>tomcat 8.5</javaWebContainer>
-					<linuxRuntime>tomcat 8.5-jre8</linuxRuntime>
+          <schemaVersion>V2</schemaVersion>
+          <runtime>
+            <os>Windows</os>
+            <javaVersion>1.8</javaVersion>
+          </runtime>
 					<authentication>
-						<serverId>azure-auth</serverId>
+						<file>../../auth.json</file>
 					</authentication>
+          <subscriptionId>22673137-baf9-4f93-9f94-77d31b15e70e</subscriptionId>
 					<appName>diego-cebollero-eccomerce</appName>
 					<resourceGroup>rg-sanvalero</resourceGroup>
+          <region>westeurope</region>
+          <appSettings>
+            <property>
+              <name>PORT</name>
+              <value>7777</value>
+            </property>
+            <property>
+              <name>JAVA_OPTS</name>
+              <value>-Xmx512m -Xms512m</value>
+            </property>
+          </appSettings>
+          <deployment>
+            <resources>
+              <resource>
+                <directory>${project.basedir}/target</directory>
+                <targetPath>${project.build.finalName}</targetPath>
+                <includes>
+                  <include>*.war</include>
+                </includes>
+              </resource>
+            </resources>
+          </deployment>
+          <stopAppDuringDeployment>true</stopAppDuringDeployment>
 				</configuration>
 			</plugin>
-		</plugins>
-	</build>
-
+    </plugins> 
+  </build> 
 </project>
