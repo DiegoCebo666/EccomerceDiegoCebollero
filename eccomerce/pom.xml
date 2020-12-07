@@ -27,7 +27,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -52,6 +51,20 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.microsoft.azure</groupId>
+				<artifactId>azure-webapp-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<configuration>
+					<javaVersion>1.8</javaVersion>
+					<javaWebContainer>tomcat 8.5</javaWebContainer>
+					<authentication>
+						<serverId>azure-auth</serverId>
+					</authentication>
+					<appName>eccommercediegocebollero</appName>
+					<resourceGroup>rg-sanvalero</resourceGroup>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
