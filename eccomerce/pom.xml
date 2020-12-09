@@ -79,9 +79,6 @@
             <os>Windows</os>
             <javaVersion>1.8</javaVersion>
           </runtime>
-					<authentication>
-						<file>../../auth.json</file>
-					</authentication>
           <subscriptionId>22673137-baf9-4f93-9f94-77d31b15e70e</subscriptionId>
 					<appName>diego-cebollero-eccomerce</appName>
 					<resourceGroup>rg-sanvalero</resourceGroup>

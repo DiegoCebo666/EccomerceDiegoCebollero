@@ -29,52 +29,54 @@ public class OrdersViewController {
     public ArrayList<Product> productsIn(int id){
         ArrayList<Product> result = new ArrayList<>();
         OrderProduct products = OrdersController.findOrderProductById(id);
-        for (int i = 0; i < products.getProductCantidad().size(); i++) {
-            for (int j = 0; j < ProductsController.products.size(); j++) {
-                if(products.getProductCantidad().get(i).getIdproduct() == ProductsController.products.get(j).getId()) 
-                    result.add(ProductsController.findProdById(ProductsController.products.get(j).getId()));
+        if (products.getProductCantidad().isEmpty()){
+            return result;
+        }else{
+            for (int i = 0; i < products.getProductCantidad().size(); i++) {
+                for (int j = 0; j < ProductsController.products.size(); j++) {
+                    if(products.getProductCantidad().get(i).getIdproduct() == ProductsController.products.get(j).getId()) 
+                        result.add(ProductsController.findProdById(ProductsController.products.get(j).getId()));
+                }
             }
+            return result;
         }
-        return result;
     }
 
     public ArrayList<Product> productsOut(int id){
-        boolean in = true;
-        ArrayList<Product> result = new ArrayList<>();
         OrderProduct products = OrdersController.findOrderProductById(id);
-        for (int j = 0; j < ProductsController.products.size(); j++) {
-            for (int i = 0; i < products.getProductCantidad().size(); i++) {
-                if(products.getProductCantidad().get(i).getIdproduct() != ProductsController.products.get(j).getId()){
-                    in = false;
-                }else{
-                    in = true;
-                    break;
+        ArrayList<Product> result = new ArrayList<>();
+        if (products.getProductCantidad().isEmpty()){
+            return result;
+        }else{
+            boolean in = true;
+            for (int j = 0; j < ProductsController.products.size(); j++) {
+                for (int i = 0; i < products.getProductCantidad().size(); i++) {
+                    if(products.getProductCantidad().get(i).getIdproduct() != ProductsController.products.get(j).getId()){
+                        in = false;
+                    }else{
+                        in = true;
+                        break;
+                    }
+                }
+                if (!in) {
+                    result.add(ProductsController.findProdById(ProductsController.products.get(j).getId()));
                 }
             }
-            if (!in) {
-                result.add(ProductsController.findProdById(ProductsController.products.get(j).getId()));
-            }
+            return result;
         }
-        return result;
     }
 
     @GetMapping("productsIn/{id}")
     public ModelAndView postProductsInOrder(@PathVariable("id") int id, @RequestParam(name = "idProd", required = true, defaultValue = "0") int idProd, 
                                             @RequestParam(name = "cantidad", required = true, defaultValue = "0") int cantidad) {
         OrdersController.findOrderProductById(id).getProductCantidad().add(new ProductQuantity(idProd, cantidad));
-        ModelAndView mv = new ModelAndView("index");
-        mv.addObject("productsIn", productsIn(id));
-        mv.addObject("productsOut", productsOut(id));
-        return mv;
+        return getProductsInOrder(id);
     }
 
     @GetMapping("productsOut/{id}")
     public ModelAndView postProductsOutOrder(@PathVariable("id") int id, @RequestParam(name = "idProd", required = true, defaultValue = "0") int idProd) {
         OrdersController.findOrderProductById(id).getProductCantidad().remove(findProdCantByProdId(id, idProd));
-        ModelAndView mv = new ModelAndView("index");
-        mv.addObject("productsIn", productsIn(id));
-        mv.addObject("productsOut", productsOut(id));
-        return mv;
+        return getProductsInOrder(id);
     }
 
     public ProductQuantity findProdCantByProdId(int idOrder ,int idProd){
